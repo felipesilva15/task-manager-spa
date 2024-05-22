@@ -1,8 +1,16 @@
-import CustomButton from "../components/button/CustomButton";
+import { Button, Flex } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return <>
-        <CustomButton label='Home'></CustomButton>
+        <Flex gap="1rem">
+            <Link to="/login">
+                <Button>Login</Button>
+            </Link>
+            <Link to="/">
+                <Button>Home</Button>
+            </Link>
+        </Flex>
     </>
 }
 
