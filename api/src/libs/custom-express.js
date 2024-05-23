@@ -6,4 +6,4 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-exports.app = app
+module.exports.app = app;
