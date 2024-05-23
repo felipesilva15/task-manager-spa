@@ -1,5 +1,6 @@
 const utils = require('../libs/utils');
 const fs = require('fs');
+const taskService = require('./task-service');
 
 let users = JSON.parse(fs.readFileSync('./src/data/users.json', 'utf-8'));
 
@@ -59,4 +60,10 @@ exports.validateLogin = (email, password) => {
     }
 
     return user;
+};
+
+exports.getTasks = (id) => {
+    let data = taskService.list(id);
+
+    return data;
 };

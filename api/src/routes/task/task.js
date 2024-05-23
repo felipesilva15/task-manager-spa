@@ -1,15 +1,15 @@
-const userService = require('./../../services/user-service');
+const taskService = require('./../../services/task-service');
 
 module.exports = (router) => {
     router.get("/",async (req, res) => {
-        const data = userService.list();
+        const data = taskService.list();
 
         res.status(200).json(data);
     });
 
     router.get("/:id",async (req, res) => {
         const id = req.params.id || 0;
-        const data = userService.getById(id);
+        const data = taskService.getById(id);
 
         if (!data) {
             res.status(404).json({
@@ -23,9 +23,9 @@ module.exports = (router) => {
     });
 
     router.post("/",async (req, res) => {
-        const { name, email, password } = req.body;
+        const { description, userId, completed } = req.body;
     
-        if (!name || !email || !password) {
+        if (!description || !userId) {
             res.status(400).json({
                 message: 'Dados inválidos!' 
             });
@@ -33,14 +33,14 @@ module.exports = (router) => {
             return;
         }
 
-        const data = userService.create(req.body);
+        const data = taskService.create(req.body);
         
         return res.status(200).json(data);
     });
 
     router.put("/:id",async (req, res) => {
         const id = req.params.id || 0;
-        const data = userService.getById(id);
+        const data = taskService.getById(id);
 
         if (!data) {
             res.status(404).json({
@@ -50,14 +50,14 @@ module.exports = (router) => {
             return;
         }
 
-        const user = userService.update(id, req.body);
+        const task = taskService.update(id, req.body);
         
-        return res.status(200).json(user);
+        return res.status(200).json(task);
     });
 
     router.delete("/:id",async (req, res) => {
         const id = req.params.id || 0;
-        const data = userService.getById(id);
+        const data = taskService.getById(id);
 
         if (!data) {
             res.status(404).json({
@@ -67,16 +67,16 @@ module.exports = (router) => {
             return;
         }
 
-        userService.delete(id);
+        taskService.delete(id);
         
         return res.status(200).json({
             message: 'Registro deletado com sucesso!'
         });
     });
 
-    router.get("/:id/tasks",async (req, res) => {
+    router.patch("/:id/toogle-completed",async (req, res) => {
         const id = req.params.id || 0;
-        const data = userService.getById(id);
+        const data = taskService.getById(id);
 
         if (!data) {
             res.status(404).json({
@@ -86,9 +86,9 @@ module.exports = (router) => {
             return;
         }
 
-        const tasks = userService.getTasks(id);
+        const task = taskService.toogleCompleted(id);
         
-        return res.status(200).json(tasks);
+        return res.status(200).json(task);
     });
 
     return router;
