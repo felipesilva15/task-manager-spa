@@ -1,16 +1,47 @@
-import {  Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon, WarningIcon } from "@chakra-ui/icons";
+import {  Button, Card, CardBody, CardHeader, Divider, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputRightElement, Link, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [show, setShow] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    const toast = useToast();
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         setIsLoading(true);
 
-        setInterval(() => {
-            setIsLoading(false);
-        }, 3000);
+        setTimeout(() => {
+            if(!email) {
+                setIsLoading(false);
+                showErrorToast('O campo e-mail é obrigatório!');
+                return;
+            }
+
+            if(!password) {
+                setIsLoading(false);
+                showErrorToast('O campo senha é obrigatório!');
+                return;
+            }
+
+            navigate('/');
+        }, 1000);
+    }
+
+    const showErrorToast = (message) => {
+        toast({
+            title: 'Atenção',
+            description: message,
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+            icon: <WarningIcon />,
+        });
     }
 
     return (
@@ -22,7 +53,7 @@ const Login = () => {
                 <Flex gap="1rem" flexDirection="column">
                     <FormControl isRequired>
                         <FormLabel>E-mail</FormLabel>
-                        <Input placeholder="E-mail" type="email" />
+                        <Input placeholder="E-mail" type="email" onChange={(e) => setEmail(e.target.value)}/>
                     </FormControl>
                     <FormControl isRequired>
                         <FormLabel>Senha</FormLabel>
@@ -31,15 +62,18 @@ const Login = () => {
                                 pr="4.5rem"
                                 type={show ? "text" : "password"}
                                 placeholder="Senha"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
-                            <InputRightElement width="4.5rem">
-                                <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                                {show ? "Esconder" : "Exibir"}
-                                </Button>
+                            <InputRightElement>
+                                <IconButton size="sm" variant="ghost" isRound={true} onClick={() => setShow(!show)} icon={show ? <ViewOffIcon /> : <ViewIcon />} />
                             </InputRightElement>
                         </InputGroup>
                     </FormControl>
                     <Button colorScheme="blue" mt="3" isLoading={isLoading} onClick={handleSubmit}>Login</Button>
+                    <Divider />
+                    <Text>
+                        Não possui uma conta? <Link color='teal.500' href='/auth/signin'>Faça o cadastro</Link>
+                    </Text>
                 </Flex>
             </CardBody>
         </Card>
