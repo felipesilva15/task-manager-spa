@@ -2,6 +2,9 @@ import { ViewIcon, ViewOffIcon, WarningIcon } from "@chakra-ui/icons";
 import {  Button, Card, CardBody, CardHeader, Divider, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputRightElement, Link, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const baseUrl = 'http://localhost:3050/api/auth/login';
 
 const Login = () => {
     const [show, setShow] = useState(false);
@@ -15,21 +18,34 @@ const Login = () => {
     const handleSubmit = () => {
         setIsLoading(true);
 
-        setTimeout(() => {
-            if(!email) {
-                setIsLoading(false);
-                showErrorToast('O campo e-mail é obrigatório!');
-                return;
-            }
+        if(!email) {
+            setIsLoading(false);
+            showErrorToast('O campo e-mail é obrigatório!');
+            return;
+        }
 
-            if(!password) {
-                setIsLoading(false);
-                showErrorToast('O campo senha é obrigatório!');
-                return;
-            }
+        if(!password) {
+            setIsLoading(false);
+            showErrorToast('O campo senha é obrigatório!');
+            return;
+        }
 
-            navigate('/');
-        }, 1000);
+        axios.post(baseUrl, { email, password })
+            .then((res) => {
+                localStorage.setItem('user.name', res.data.name);
+                localStorage.setItem('user.id', res.data.id);
+
+                navigate('/');
+            })
+            .catch((err) => {
+                setIsLoading(false);
+
+                if (err.response.data) {
+                    showErrorToast(err.response.data.message);
+                } else {
+                    showErrorToast('Ocorreu um erro inesperado');
+                }
+            });
     }
 
     const showErrorToast = (message) => {

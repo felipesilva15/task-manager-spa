@@ -1,7 +1,10 @@
-import { ViewIcon, ViewOffIcon, WarningIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, ViewIcon, ViewOffIcon, WarningIcon } from "@chakra-ui/icons";
 import {  Button, Card, CardBody, CardHeader, Divider, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputRightElement, Link, Text, useToast } from "@chakra-ui/react";
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const baseUrl = 'http://localhost:3050/api/user';
 
 const SignIn = () => {
     const [show, setShow] = useState(false);
@@ -15,28 +18,48 @@ const SignIn = () => {
 
     const handleSubmit = () => {
         setIsLoading(true);
+ 
+        if(!name) {
+            setIsLoading(false);
+            showErrorToast('O campo nome é obrigatório!');
+            return;
+        }
 
-        setTimeout(() => {
-            if(!name) {
+        if(!email) {
+            setIsLoading(false);
+            showErrorToast('O campo e-mail é obrigatório!');
+            return;
+        }
+
+        if(!password) {
+            setIsLoading(false);
+            showErrorToast('O campo senha é obrigatório!');
+            return;
+        }
+
+        axios.post(baseUrl, { name, email, password })
+            .then((res) => {
+                toast({
+                    title: 'Sucesso',
+                    description: 'Cadastro realizado com sucesso!',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'top',
+                    icon: <CheckCircleIcon />,
+                });
+
+                navigate('/auth/login');
+            })
+            .catch((err) => {
                 setIsLoading(false);
-                showErrorToast('O campo nome é obrigatório!');
-                return;
-            }
 
-            if(!email) {
-                setIsLoading(false);
-                showErrorToast('O campo e-mail é obrigatório!');
-                return;
-            }
-
-            if(!password) {
-                setIsLoading(false);
-                showErrorToast('O campo senha é obrigatório!');
-                return;
-            }
-
-            navigate('/auth/login');
-        }, 1000);
+                if (err.response.data) {
+                    showErrorToast(err.response.data.message);
+                } else {
+                    showErrorToast('Ocorreu um erro inesperado');
+                }
+            });
     }
 
     const showErrorToast = (message) => {

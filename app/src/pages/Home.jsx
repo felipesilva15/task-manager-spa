@@ -1,9 +1,9 @@
-import { Button, Flex } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Center } from "@chakra-ui/react";
+import TaskList from "../components/TaskList";
 
 const Home = () => {
     return <>
-        <Flex gap="1rem">
+        {/* <Flex gap="1rem">
             <Link to="/auth/login">
                 <Button>Login</Button>
             </Link>
@@ -13,7 +13,10 @@ const Home = () => {
             <Link to="/">
                 <Button>Home</Button>
             </Link>
-        </Flex>
+        </Flex> */}
+        <Center>
+            <TaskList />
+        </Center>
     </>
 }
 
