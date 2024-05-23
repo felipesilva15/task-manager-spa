@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon, WarningIcon } from "@chakra-ui/icons";
+import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { Checkbox, Flex, Heading, IconButton, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";

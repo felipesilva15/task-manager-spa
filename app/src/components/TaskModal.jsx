@@ -1,5 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 
@@ -74,7 +74,7 @@ const TaskModal = ({ isOpen, onClose, onSave }) => {
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={handleSubmit}>
+                        <Button colorScheme='blue' mr={3} onClick={handleSubmit} isLoading={isLoading}>
                             Salvar
                         </Button>
                         <Button onClick={onClose}>Cancelar</Button>
