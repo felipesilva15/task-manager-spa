@@ -1,7 +1,9 @@
-import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
-import { Checkbox, IconButton, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useToast } from "@chakra-ui/react";
+import { AddIcon, DeleteIcon, WarningIcon } from "@chakra-ui/icons";
+import { Checkbox, Flex, Heading, IconButton, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TaskModal from "./TaskModal";
+import OpenModalButton from "./OpenModalButton";
 
 const userId = localStorage.getItem('user.id');
 const baseUrl = 'http://localhost:3050/api';
@@ -9,6 +11,7 @@ const baseUrl = 'http://localhost:3050/api';
 const TaskList = () => {
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const toast = useToast();
 
@@ -81,60 +84,76 @@ const TaskList = () => {
         });
     }
 
+    const handleSave = (data) => {
+        const updatedTasks = tasks;
+        updatedTasks.push(data);
+
+        setTasks(updatedTasks);
+    }
+
     return (
         <>
-            <TableContainer>
-                <Table size={{base: "sm", md: "lg"}} >
-                    <Thead>
-                        <Tr>
-                            <Th></Th>
-                            <Th>Descrição</Th>
-                            <Th></Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {   
-                            isLoading 
-                            ?
-                            <>
-                                <Tr>
-                                    <Td></Td>
-                                    <Td><Skeleton height="20px" /></Td>
-                                    <Td></Td>
-                                </Tr>
-                                <Tr>
-                                    <Td></Td>
-                                    <Td><Skeleton height="20px" /></Td>
-                                    <Td></Td>
-                                </Tr>
+            <Flex flexDir="column" gap="0.5rem">
+                <Flex justifyContent="space-between" align="center">
+                    <Heading size="md">Lista de tarefas</Heading>
+                    <OpenModalButton onOpen={onOpen} />
+                    <TaskModal isOpen={isOpen} onClose={onClose} onSave={handleSave} />
+                </Flex>
+                <TableContainer>
+                    <Table size={{base: "sm", md: "lg"}} >
+                        <Thead>
+                            <Tr>
+                                <Th></Th>
+                                <Th></Th>
+                                <Th>
+                                    
+                                </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {   
+                                isLoading 
+                                ?
+                                <>
                                     <Tr>
-                                    <Td></Td>
-                                    <Td><Skeleton height="20px" /></Td>
-                                    <Td></Td>
-                                </Tr>
-                            </>
-                            :
-                                tasks.map((task, i) => {
-                                    return (
-                                        <Tr key={task.id}>
-                                            <Td>
-                                                <Checkbox defaultChecked={task.completed} onChange={(e) => handleCheck(i, e.target.checked)} />
-                                            </Td>
-                                            <Td>
-                                                <Text as={ task.completed ? 'del' : null}>
-                                                    {task.description}
-                                                </Text>
-                                            </Td>
-                                            <Td>
-                                                <IconButton size="sm" variant="ghost" isRound={true} icon={<DeleteIcon color='red.400' />} onClick={() => {handleDelete(i)}} />
-                                            </Td>
-                                        </Tr>
-                                    );
-                                })
-                        }
-                    </Tbody>
-                </Table>
-            </TableContainer>
+                                        <Td></Td>
+                                        <Td><Skeleton height="20px" /></Td>
+                                        <Td></Td>
+                                    </Tr>
+                                    <Tr>
+                                        <Td></Td>
+                                        <Td><Skeleton height="20px" /></Td>
+                                        <Td></Td>
+                                    </Tr>
+                                        <Tr>
+                                        <Td></Td>
+                                        <Td><Skeleton height="20px" /></Td>
+                                        <Td></Td>
+                                    </Tr>
+                                </>
+                                :
+                                    tasks.map((task, i) => {
+                                        return (
+                                            <Tr key={task.id}>
+                                                <Td>
+                                                    <Checkbox defaultChecked={task.completed} onChange={(e) => handleCheck(i, e.target.checked)} />
+                                                </Td>
+                                                <Td>
+                                                    <Text as={ task.completed ? 'del' : null}>
+                                                        {task.description}
+                                                    </Text>
+                                                </Td>
+                                                <Td>
+                                                    <IconButton size="sm" variant="ghost" isRound={true} icon={<DeleteIcon color='red.400' />} onClick={() => {handleDelete(i)}} />
+                                                </Td>
+                                            </Tr>
+                                        );
+                                    })
+                            }
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </Flex>
         </>
     );
 }
