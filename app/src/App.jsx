@@ -4,6 +4,8 @@ import RootLayout from './layouts/RootLayout';
 import Login from './pages/Login';
 import SignIn from './pages/SignIn';
 import AuthLayout from './layouts/AuthLayout';
+import { useColorMode } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 // router and routes
 const router = createBrowserRouter(
@@ -21,6 +23,12 @@ const router = createBrowserRouter(
 )
 
 function App() {
+  const { toggleColorMode } = useColorMode()
+
+  useEffect(() => {
+    toggleColorMode();
+  }, [])
+
   return (
     <RouterProvider router={router} />
   )
