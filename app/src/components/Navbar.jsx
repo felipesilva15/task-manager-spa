@@ -1,14 +1,14 @@
 import { Box, Button, Flex, HStack, Heading, Spacer, Text, useToast } from "@chakra-ui/react"
 import { UnlockIcon } from "@chakra-ui/icons"
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Navbar() {
     const [username, setUsername] = useState('');
     const toast = useToast();
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const validateAndSetUser = useCallback(() => {
         const name = localStorage.getItem('user.name') ?? '';
 
         setUsername(name);
@@ -16,7 +16,11 @@ export default function Navbar() {
         if (!name) {
             navigate('/auth/login');
         }
-    }, [navigate, setUsername, username])
+    }, [navigate, setUsername]);
+
+    useEffect(() => {
+        validateAndSetUser();
+    }, [validateAndSetUser])
   
     const handlerLogout = () => {
         localStorage.removeItem('user.name');

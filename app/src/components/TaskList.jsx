@@ -1,11 +1,10 @@
 import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { Checkbox, Flex, Heading, IconButton, Skeleton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import TaskModal from "./TaskModal";
 import OpenModalButton from "./OpenModalButton";
 
-const userId = localStorage.getItem('user.id');
 const baseUrl = 'http://localhost:3050/api';
 
 const TaskList = () => {
@@ -15,8 +14,25 @@ const TaskList = () => {
 
     const toast = useToast();
 
+    const showErrorToast = useCallback((message) => {
+        toast({
+            title: 'Atenção',
+            description: message,
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+            position: 'top',
+            icon: <WarningIcon />,
+        });
+    }, [toast]);
+
     useEffect(() => {
         setIsLoading(true);
+        const userId = localStorage.getItem('user.id');
+
+        if(!userId) {
+            return;
+        }
 
         axios.get(`${baseUrl}/user/${userId}/tasks`)
             .then((res) => {
@@ -32,7 +48,7 @@ const TaskList = () => {
                     showErrorToast('Ocorreu um erro inesperado');
                 }
             });
-    }, []);
+    }, [showErrorToast]);
 
     const handleCheck = (index, checked) => {
         const id = tasks[index].id;
@@ -70,18 +86,6 @@ const TaskList = () => {
                     showErrorToast('Ocorreu um erro inesperado');
                 }
             });
-    }
-
-    const showErrorToast = (message) => {
-        toast({
-            title: 'Atenção',
-            description: message,
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-            position: 'top',
-            icon: <WarningIcon />,
-        });
     }
 
     const handleSave = (data) => {
