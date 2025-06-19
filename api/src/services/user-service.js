@@ -1,8 +1,10 @@
 const utils = require('../libs/utils');
 const fs = require('fs');
 const taskService = require('./task-service');
+const dataFilePath = './src/data/users.json';
 
-let users = JSON.parse(fs.readFileSync('./src/data/users.json', 'utf-8'));
+utils.checkFileAndCreateFile(dataFilePath, '[]');
+let users = JSON.parse(fs.readFileSync(dataFilePath, 'utf-8'));
 
 exports.list = () => {
     return users;
@@ -23,7 +25,7 @@ exports.create = (data) => {
     };
 
     users.push(user);
-    fs.writeFileSync('./src/data/users.json', JSON.stringify(users), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(users), 'utf-8');
 
     return user;
 };
@@ -39,7 +41,7 @@ exports.update = (id, data) => {
     this.delete(id);
 
     users.push(user);
-    fs.writeFileSync('./src/data/users.json', JSON.stringify(users), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(users), 'utf-8');
 
     return user;
 };
@@ -49,7 +51,7 @@ exports.delete = (id) => {
         return user.id !== id
     });
 
-    fs.writeFileSync('./src/data/users.json', JSON.stringify(users), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(users), 'utf-8');
 };
 
 exports.validateLogin = (email, password) => {

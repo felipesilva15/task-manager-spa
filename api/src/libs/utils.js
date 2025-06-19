@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 exports.generateUUID = () => {
     let d = new Date().getTime();
     let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;
@@ -15,3 +17,11 @@ exports.generateUUID = () => {
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 };
+
+exports.checkFileAndCreateFile = async (path, inittialContent = '') => {
+  try {
+    fs.accessSync(path);
+  } catch (err) {
+    fs.writeFileSync(path, inittialContent);
+  }
+}

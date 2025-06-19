@@ -1,8 +1,9 @@
 const utils = require('../libs/utils');
 const fs = require('fs');
-const task = require('../routes/task');
+const dataFilePath = './src/data/tasks.json';
 
-let tasks = JSON.parse(fs.readFileSync('./src/data/tasks.json', 'utf-8'));
+utils.checkFileAndCreateFile(dataFilePath, '[]');
+let tasks = JSON.parse(fs.readFileSync(dataFilePath, 'utf-8'));
 
 exports.list = (userId) => {
     let data = tasks;
@@ -31,7 +32,7 @@ exports.create = (data) => {
     };
 
     tasks.push(task);
-    fs.writeFileSync('./src/data/tasks.json', JSON.stringify(tasks), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(tasks), 'utf-8');
 
     return task;
 };
@@ -47,7 +48,7 @@ exports.update = (id, data) => {
     this.delete(id);
 
     tasks.push(task);
-    fs.writeFileSync('./src/data/tasks.json', JSON.stringify(tasks), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(tasks), 'utf-8');
 
     return task;
 };
@@ -57,7 +58,7 @@ exports.delete = (id) => {
         return task.id !== id
     });
 
-    fs.writeFileSync('./src/data/tasks.json', JSON.stringify(tasks), 'utf-8');
+    fs.writeFileSync(dataFilePath, JSON.stringify(tasks), 'utf-8');
 };
 
 exports.toogleCompleted = (id) => {
