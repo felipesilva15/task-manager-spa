@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3050:3050"
+    environment:
+      SERVER_PORT: 3050
+    volumes:
+      - api_data:/app/src/data
+    networks:
+      - task-manager
+
+  app:
+    build:
+      context: ./app
+      args:
+        REACT_APP_BASE_URL_API: ${REACT_APP_BASE_URL_API}
+        REACT_APP_NODE_ENV: ${REACT_APP_NODE_ENV}
+    ports:
+      - "3000:80"
+    networks:
+      - task-manager
+
+volumes:
+  api_data:
+
+networks:
+  task-manager:
+    driver: bridge
