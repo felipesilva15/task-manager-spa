@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3050/api/auth/login';
+const baseUrl = `${process.env.REACT_APP_BASE_URL_API}/auth/login`;
 
 const Login = () => {
     const [show, setShow] = useState(false);

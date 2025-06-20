@@ -5,7 +5,7 @@ import axios from "axios";
 import TaskModal from "./TaskModal";
 import OpenModalButton from "./OpenModalButton";
 
-const baseUrl = 'http://localhost:3050/api';
+const baseUrl = process.env.REACT_APP_BASE_URL_API;
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([]);

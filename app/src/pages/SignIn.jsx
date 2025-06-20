@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const baseUrl = 'http://localhost:3050/api/user';
+const baseUrl = `${process.env.REACT_APP_BASE_URL_API}/user`;
 
 const SignIn = () => {
     const [show, setShow] = useState(false);

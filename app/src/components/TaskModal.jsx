@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const userId = localStorage.getItem('user.id');
-const baseUrl = 'http://localhost:3050/api/task';
+const baseUrl = `${process.env.REACT_APP_BASE_URL_API}/task`;
 const emptyData = { id: '', description: '', userId: userId, completed: false };
 
 const TaskModal = ({ isOpen, onClose, onSave }) => {
@@ -31,7 +31,8 @@ const TaskModal = ({ isOpen, onClose, onSave }) => {
             .then((res) => {
                 onSave(res.data);
                 setFormData(emptyData);
-
+                setIsLoading(false);
+                
                 onClose();
             })
             .catch((err) => {
